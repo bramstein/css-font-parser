@@ -1,0 +1,20 @@
+{
+  "name": "css-font-parser",
+  "version": "0.1.0",
+  "description": "A parser for the CSS font value",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "css",
+    "font",
+    "parser"
+  ],
+  "author": "Bram Stein <b.l.stein@gmail.com> (http://www.bramstein.com)",
+  "license": "BSD"
+}
