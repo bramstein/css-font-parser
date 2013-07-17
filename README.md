@@ -1,5 +1,7 @@
 ## CSS font value parser
 
+[![browser support](https://ci.testling.com/bramstein/css-font-parser.png)](https://ci.testling.com/bramstein/css-font-parser)
+
 A simple parser for parsing CSS font values in JavaScript.
 
 ## Usage

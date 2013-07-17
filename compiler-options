@@ -1,0 +1,20 @@
+--transform_amd_modules
+--process_common_js_modules
+--compilation_level=ADVANCED_OPTIMIZATIONS
+--jscomp_error accessControls
+--jscomp_error checkRegExp
+--jscomp_error checkVars
+--jscomp_error deprecated
+--jscomp_error invalidCasts
+--jscomp_error missingProperties
+--jscomp_error undefinedVars
+--jscomp_error visibility
+--jscomp_warning fileoverviewTags
+--jscomp_warning nonStandardJsDocs
+--jscomp_warning strictModuleDepCheck
+--jscomp_warning unknownDefines
+--warning_level=VERBOSE
+--summary_detail_level=3
+--language_in ECMASCRIPT5_STRICT
+--generate_exports
+--output_wrapper (function(){%output%}(window));
