@@ -1,11 +1,6 @@
-var parse, expect;
-
 if (typeof require !== 'undefined') {
   expect = require('expect.js');
   parse = require('../index');
-} else {
-  expect = window.expect;
-  parse = window.parse;
 }
 
 describe('CSS Font parser', function () {
