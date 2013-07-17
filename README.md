@@ -4,8 +4,17 @@
 
 A simple parser for parsing CSS font values in JavaScript.
 
+## Installation
+
+If you are using Node.js you can install the parser using:
+
+    $ npm install css-font-parser
+
+If you are using an AMD loader you can include the `src/parser.js` directly into your project.
+
 ## Usage
 
+    > var parse = require('css-font-parser');
     > parse('15px sans-serif');
     
     {
