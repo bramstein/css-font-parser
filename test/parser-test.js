@@ -43,6 +43,23 @@ describe('CSS Font parser', function () {
     expect(parse('12px Times New Roman, Comic Sans MS')).to.eql({ 'font-size': '12px', 'font-family': ['Times New Roman', 'Comic Sans MS'] });
   });
 
+  // Examples taken from: http://mathiasbynens.be/notes/unquoted-font-family
+  it('correctly returns null on invalid identifiers', function () {
+    expect(parse('12px Red/Black')).to.eql(null);
+    expect(parse("12px 'Lucida' Grande")).to.eql(null);
+    expect(parse('12px Ahem!')).to.eql(null);
+    expect(parse('12px Hawaii 5-0')).to.eql(null);
+    expect(parse('12px $42')).to.eql(null);
+  });
+
+  it('correctly parses escaped characters in identifiers', function () {
+    expect(parse('12px Red\\/Black')).to.eql({ 'font-size': '12px', 'font-family': ['Red\\/Black'] });
+    expect(parse('12px Lucida    Grande')).to.eql({ 'font-size': '12px', 'font-family': ['Lucida Grande'] });
+    expect(parse('12px Ahem\\!')).to.eql({ 'font-size': '12px', 'font-family': ['Ahem\\!'] });
+    expect(parse('12px \\$42')).to.eql({ 'font-size': '12px', 'font-family': ['\\$42'] });
+    expect(parse('12px €42')).to.eql({ 'font-size': '12px', 'font-family': ['€42'] });
+  });
+
   it('correctly parses font-size', function () {
     expect(parse('12px serif')).to.eql({ 'font-size': '12px', 'font-family': ['serif'] });
     expect(parse('xx-small serif')).to.eql({ 'font-size': 'xx-small', 'font-family': ['serif'] });
