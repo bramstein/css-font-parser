@@ -28,14 +28,14 @@ describe('CSS Font parser', function () {
   });
 
   it('handles quoted family names correctly', function () {
-    expect(parse('12px "Times New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ['Times New Roman'] });
-    expect(parse("12px 'Times New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ['Times New Roman'] });
+    expect(parse('12px "Times New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ['"Times New Roman"'] });
+    expect(parse("12px 'Times New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ["'Times New Roman'"] });
 
-    expect(parse('12px "Times\\\' New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ["Times' New Roman"] });
-    expect(parse("12px 'Times\\\" New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ['Times" New Roman'] });
+    expect(parse('12px "Times\\\' New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ["\"Times\\\' New Roman\""] });
+    expect(parse("12px 'Times\\\" New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ['\'Times\\\" New Roman\''] });
 
-    expect(parse('12px "Times\\\" New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ['Times" New Roman'] });
-    expect(parse("12px 'Times\\\' New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ["Times' New Roman"] });
+    expect(parse('12px "Times\\\" New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ['"Times\\\" New Roman"'] });
+    expect(parse("12px 'Times\\\' New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ["'Times\\\' New Roman'"] });
   });
 
   it('handles unquoted identifiers correctly', function () {

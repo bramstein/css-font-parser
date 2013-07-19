@@ -53,7 +53,7 @@ define(function () {
           }
         } while (input.charAt(index - 2) === '\\');
 
-        result['font-family'].push(input.slice(i + 1, index - 1).replace(/\\('|")/g, "$1"));
+        result['font-family'].push(input.slice(i, index));
 
         i = index - 1;
         state = states.FONT_FAMILY;
