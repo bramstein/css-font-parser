@@ -1,7 +1,7 @@
 var requirejs = require('requirejs');
 
 requirejs.config({
-  baseUrl: '.',
+  baseUrl: __dirname,
   nodeRequire: require
 });
 
