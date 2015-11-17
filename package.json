@@ -1,6 +1,6 @@
 {
   "name": "css-font-parser",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A parser for the CSS font value",
   "main": "index.js",
   "directories": {
@@ -45,4 +45,4 @@
     "harness": "mocha",
     "html": "test/tap.html"
   }
-} 
+}
