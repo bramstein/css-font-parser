@@ -8,12 +8,10 @@
     <div id="mocha"></div>
     <script src="../node_modules/mocha/mocha.js"></script>
     <script src="../node_modules/expect.js/expect.js"></script>
-    <script>
-      function define(factory) {
-        window.parse = factory();
-      }
-    </script>
     <script src="../src/parser.js"></script>
+    <script>
+      window.parse = window.cssFontParser;
+    </script>
     <script>mocha.ui('bdd').reporter('tap');</script>
     <script src="./parser-test.js"></script>
     <script>
