@@ -1,6 +1,6 @@
 {
   "name": "css-font-parser",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A parser for the CSS font value",
   "main": "lib/parser.js",
   "directories": {
