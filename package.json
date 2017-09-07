@@ -2,7 +2,7 @@
   "name": "css-font-parser",
   "version": "0.2.1",
   "description": "A parser for the CSS font value",
-  "main": "index.js",
+  "main": "lib/parser.js",
   "directories": {
     "test": "test"
   },
@@ -17,9 +17,6 @@
   ],
   "author": "Bram Stein <b.l.stein@gmail.com> (http://www.bramstein.com)",
   "license": "BSD",
-  "dependencies": {
-    "requirejs": "=2.1.8"
-  },
   "devDependencies": {
     "mocha": "=1.12.0",
     "expect.js": "=0.2.0",
