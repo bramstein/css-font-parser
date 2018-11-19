@@ -142,9 +142,17 @@ describe('CSS Font parser', function () {
     expect(parse('bolder 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': 'bolder', 'font-family': ['serif'] });
     expect(parse('lighter 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': 'lighter', 'font-family': ['serif'] });
 
-    for (var i = 1; i < 10; i += 1) {
+    for (var i = 1; i <= 10; i += 1) {
       expect(parse(i * 100 + ' 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': i * 100, 'font-family': ['serif'] });
     }
+
+    expect(parse('1 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '1', 'font-family': ['serif'] });
+    expect(parse('723 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '723', 'font-family': ['serif'] });
+    expect(parse('1000 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '1000', 'font-family': ['serif'] });
+
+    expect(parse('0 12px serif')).to.eql({ 'font-size': '12px', 'font-family': ['serif'] });
+    expect(parse('1001 12px serif')).to.eql({ 'font-size': '12px', 'font-family': ['serif'] });
+    expect(parse('100.0 12px serif')).to.eql({ 'font-size': '12px', 'font-family': ['serif'] });
   });
 
   it('correctly parses font-stretch', function () {
