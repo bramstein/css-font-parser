@@ -107,7 +107,7 @@
           state = states.AFTER_OBLIQUE;
         } else if (/^small-caps$/.test(buffer)) {
           result['font-variant'] = buffer;
-        } else if (/^(?:bold(?:er)?|lighter|[1-9][0-9]{0,2}|1000)$/.test(buffer)) {
+        } else if (/^(?:bold(?:er)?|lighter|[1-9][0-9]{0,2}(?:\.[0-9]+)?|1000(?:\.0+)?)$/.test(buffer)) {
           result['font-weight'] = buffer;
         } else if (/^(?:(?:ultra|extra|semi)-)?(?:condensed|expanded)$/.test(buffer)) {
           result['font-stretch'] = buffer;
