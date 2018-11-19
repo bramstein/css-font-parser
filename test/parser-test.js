@@ -131,6 +131,9 @@ describe('CSS Font parser', function () {
   it('correctly parses font-style', function () {
     expect(parse('italic 12px serif')).to.eql({ 'font-size': '12px', 'font-style': 'italic', 'font-family': ['serif'] });
     expect(parse('oblique 12px serif')).to.eql({ 'font-size': '12px', 'font-style': 'oblique', 'font-family': ['serif'] });
+    expect(parse('oblique 20deg 12px serif')).to.eql({ 'font-size': '12px', 'font-style': 'oblique 20deg', 'font-family': ['serif'] });
+    expect(parse('oblique 0.02turn 12px serif')).to.eql({ 'font-size': '12px', 'font-style': 'oblique 0.02turn', 'font-family': ['serif'] });
+    expect(parse('oblique .04rad 12px serif')).to.eql({ 'font-size': '12px', 'font-style': 'oblique .04rad', 'font-family': ['serif'] });
   });
 
   it('correctly parses font-variant', function () {

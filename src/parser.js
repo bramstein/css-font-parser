@@ -21,7 +21,8 @@
     VARIATION: 1,
     LINE_HEIGHT: 2,
     FONT_FAMILY: 3,
-    BEFORE_FONT_FAMILY: 4
+    BEFORE_FONT_FAMILY: 4,
+    AFTER_OBLIQUE: 5
   };
 
   /**
@@ -83,14 +84,27 @@
           result['font-family'].push(identifier);
         }
         buffer = '';
+      } else if (state === states.AFTER_OBLIQUE && c === ' ') {
+        if (/^(?:\+|-)?(?:[0-9]*\.)?[0-9]+(?:deg|grad|rad|turn)$/.test(buffer)) {
+          result['font-style'] += ' ' + buffer;
+          buffer = '';
+        } else {
+          // The 'oblique' token was not followed by an angle.
+          // Backtrack to allow the token to be parsed as VARIATION
+          i -= 1;
+        }
+        state = states.VARIATION;
       } else if (state === states.VARIATION && (c === ' ' || c === '/')) {
         if (/^((xx|x)-large|(xx|s)-small|small|large|medium)$/.test(buffer) ||
             /^(larg|small)er$/.test(buffer) ||
             /^(\+|-)?([0-9]*\.)?[0-9]+(em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)$/.test(buffer)) {
           state = c === '/' ? states.LINE_HEIGHT : states.BEFORE_FONT_FAMILY;
           result['font-size'] = buffer;
-        } else if (/^(italic|oblique)$/.test(buffer)) {
+        } else if (/^italic$/.test(buffer)) {
           result['font-style'] = buffer;
+        } else if (/^oblique$/.test(buffer)) {
+          result['font-style'] = buffer;
+          state = states.AFTER_OBLIQUE;
         } else if (/^small-caps$/.test(buffer)) {
           result['font-variant'] = buffer;
         } else if (/^(bold(er)?|lighter|[1-9][0-9]{0,2}|1000)$/.test(buffer)) {
