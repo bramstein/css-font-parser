@@ -13,7 +13,7 @@
         // Browser globals
         root.cssFontParser = factory();
     }
-}(this, function (b) {
+}(this, function () {
   /**
    * @enum {number}
    */
@@ -55,7 +55,9 @@
           'font-family': []
         };
 
-    for (var c, i = 0; c = input.charAt(i); i += 1) {
+    for (var i = 0; i < input.length; i += 1) {
+      var c = input.charAt(i);
+
       if (state === states.BEFORE_FONT_FAMILY && (c === '"' || c === "'")) {
         var index = i + 1;
 
@@ -86,7 +88,7 @@
       } else if (state === states.VARIATION && (c === ' ' || c === '/')) {
         if (/^((xx|x)-large|(xx|s)-small|small|large|medium)$/.test(buffer) ||
             /^(larg|small)er$/.test(buffer) ||
-            /^(\+|-)?([0-9]*\.)?[0-9]+(em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)$/.test(buffer)) {
+            /^([+-])?([0-9]*\.)?[0-9]+(em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)$/.test(buffer)) {
           state = c === '/' ? states.LINE_HEIGHT : states.BEFORE_FONT_FAMILY;
           result['font-size'] = buffer;
         } else if (/^(italic|oblique)$/.test(buffer)) {
@@ -100,7 +102,7 @@
         }
         buffer = '';
       } else if (state === states.LINE_HEIGHT && c === ' ') {
-        if (/^(\+|-)?([0-9]*\.)?[0-9]+(em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)?$/.test(buffer)) {
+        if (/^([+-])?([0-9]*\.)?[0-9]+(em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)?$/.test(buffer)) {
           result['line-height'] = buffer;
         }
         state = states.BEFORE_FONT_FAMILY;
@@ -117,10 +119,10 @@
     }
 
     if (state === states.BEFORE_FONT_FAMILY) {
-      var identifier = parseIdentifier(buffer);
+      var fontFamily = parseIdentifier(buffer);
 
-      if (identifier) {
-        result['font-family'].push(identifier);
+      if (fontFamily) {
+        result['font-family'].push(fontFamily);
       }
     }
 

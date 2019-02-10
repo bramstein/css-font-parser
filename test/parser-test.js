@@ -1,6 +1,8 @@
 if (typeof require !== 'undefined') {
   expect = require('expect.js');
   parse = require('../src/parser');
+} else {
+  parse = window.cssFontParser;
 }
 
 describe('CSS Font parser', function () {
