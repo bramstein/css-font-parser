@@ -145,7 +145,7 @@ describe('CSS Font parser', function () {
     expect(parse('lighter 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': 'lighter', 'font-family': ['serif'] });
 
     for (var i = 1; i < 10; i += 1) {
-      expect(parse(i * 100 + ' 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': i * 100, 'font-family': ['serif'] });
+      expect(parse(i * 100 + ' 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '' + i * 100, 'font-family': ['serif'] });
     }
   });
 
