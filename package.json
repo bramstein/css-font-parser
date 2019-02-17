@@ -18,9 +18,9 @@
   "author": "Bram Stein <b.l.stein@gmail.com> (http://www.bramstein.com)",
   "license": "BSD",
   "devDependencies": {
-    "mocha": "=1.12.0",
-    "expect.js": "=0.2.0",
-    "closure-compiler": "=0.2.0"
+    "closure-compiler": "0.2.12",
+    "expect.js": "0.3.1",
+    "mocha": "5.2.0"
   },
   "testling": {
     "browsers": [
