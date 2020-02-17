@@ -131,6 +131,9 @@ describe('CSS Font parser', function () {
   it('correctly parses font-style', function () {
     expect(parse('italic 12px serif')).to.eql({ 'font-size': '12px', 'font-style': 'italic', 'font-family': ['serif'] });
     expect(parse('oblique 12px serif')).to.eql({ 'font-size': '12px', 'font-style': 'oblique', 'font-family': ['serif'] });
+    expect(parse('oblique 20deg 12px serif')).to.eql({ 'font-size': '12px', 'font-style': 'oblique 20deg', 'font-family': ['serif'] });
+    expect(parse('oblique 0.02turn 12px serif')).to.eql({ 'font-size': '12px', 'font-style': 'oblique 0.02turn', 'font-family': ['serif'] });
+    expect(parse('oblique .04rad 12px serif')).to.eql({ 'font-size': '12px', 'font-style': 'oblique .04rad', 'font-family': ['serif'] });
   });
 
   it('correctly parses font-variant', function () {
@@ -142,9 +145,27 @@ describe('CSS Font parser', function () {
     expect(parse('bolder 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': 'bolder', 'font-family': ['serif'] });
     expect(parse('lighter 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': 'lighter', 'font-family': ['serif'] });
 
-    for (var i = 1; i < 10; i += 1) {
+    for (var i = 1; i <= 10; i += 1) {
       expect(parse(i * 100 + ' 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': i * 100, 'font-family': ['serif'] });
     }
+
+    expect(parse('1 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '1', 'font-family': ['serif'] });
+    expect(parse('723 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '723', 'font-family': ['serif'] });
+    expect(parse('1000 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '1000', 'font-family': ['serif'] });
+    expect(parse('1000.00 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '1000.00', 'font-family': ['serif'] });
+    expect(parse('1e3 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '1e3', 'font-family': ['serif'] });
+    expect(parse('1e+1 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '1e+1', 'font-family': ['serif'] });
+    expect(parse('200e-2 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '200e-2', 'font-family': ['serif'] });
+    expect(parse('123.456 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '123.456', 'font-family': ['serif'] });
+    expect(parse('+123 12px serif')).to.eql({ 'font-size': '12px', 'font-weight': '+123', 'font-family': ['serif'] });
+
+    expect(parse('0 12px serif')).to.eql({ 'font-size': '12px', 'font-family': ['serif'] });
+    expect(parse('-1 12px serif')).to.eql({ 'font-size': '12px', 'font-family': ['serif'] });
+    expect(parse('1000. 12px serif')).to.eql({ 'font-size': '12px', 'font-family': ['serif'] });
+    expect(parse('1000.1 12px serif')).to.eql({ 'font-size': '12px', 'font-family': ['serif'] });
+    expect(parse('1001 12px serif')).to.eql({ 'font-size': '12px', 'font-family': ['serif'] });
+    expect(parse('1.1e3 12px serif')).to.eql({ 'font-size': '12px', 'font-family': ['serif'] });
+    expect(parse('1e-2 12px serif')).to.eql({ 'font-size': '12px', 'font-family': ['serif'] });
   });
 
   it('correctly parses font-stretch', function () {
