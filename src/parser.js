@@ -107,7 +107,7 @@
           state = states.AFTER_OBLIQUE;
         } else if (/^small-caps$/.test(buffer)) {
           result['font-variant'] = buffer;
-        } else if (/^(?:bold(?:er)?|lighter)$/.test(buffer)) {
+        } else if (/^(?:bold(?:er)?|lighter|normal)$/.test(buffer)) {
           result['font-weight'] = buffer;
         } else if (/^[+-]?(?:[0-9]*\.)?[0-9]+(?:e[+-]?(?:0|[1-9][0-9]*))?$/.test(buffer)) {
           var num = parseFloat(buffer);
