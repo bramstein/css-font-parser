@@ -1,7 +1,5 @@
-if (typeof require !== 'undefined') {
-  expect = require('expect.js');
-  parse = require('../src/parser');
-}
+import expect from 'expect.js'
+import parse from '../src/parser.js';
 
 describe('CSS Font parser', function () {
   it('returns null on invalid css font values', function () {
