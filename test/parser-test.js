@@ -65,7 +65,7 @@ describe('CSS Font parser', function () {
   });
 
   it('parses escaped spaces correctly', function () {
-    expect(parse('12px Font Awesome\ 5 Free')).to.eql({ "font-family": ["Font Awesome 5 Free"], "font-size": "12px" });
+    expect(parse('12px Font Awesome\\ 5 Free')).to.eql({ "font-family": ["Font Awesome 5 Free"], "font-size": "12px" });
     expect(parse('12px Foo\\\\Bar')).to.eql({ 'font-family': ['Foo\\Bar'], "font-size": "12px" });
   });
 

@@ -18,7 +18,7 @@ const states = {
  * @return {string|null}
  */
 function parseIdentifier(str) {
-  const identifiers = str.replace(/^\s+|\s+$/, '').replace(/\s+/g, ' ').split(' ');
+  const identifiers = str.replace(/^\s+|\s+$/, '').replace(/\s+/g, ' ').split(/(?<!\\) /);
 
   for (let i = 0; i < identifiers.length; i += 1) {
     if (/^(?:-?\d|--)/.test(identifiers[i]) ||
@@ -26,31 +26,12 @@ function parseIdentifier(str) {
       return null;
     }
   }
-  return identifiers.join(' ');
-}
-
-function parseFontFamily(str) {
-  const result = parse(str, states.BEFORE_FONT_FAMILY);
-
-  if (result !== null) {
-    return result['font-family'];
-  } else {
-    return null;
-  }
-}
-
-function parseFont(str) {
-  const result = parse(str, states.VARIATION);
-
-  if (result !== null && result['font-size'] && result['font-family'].length) {
-    return result;
-  } else {
-    return null;
-  }
+  return identifiers.map(identifier => identifier.replace(/\\ /, ' ')).join(' ');
 }
 
 /**
  * @param {string} input
+ * @param {states} initialState
  * @return {Object|null}
  */
 function parse(input, initialState) {
@@ -148,6 +129,26 @@ function parse(input, initialState) {
   }
 
   return result;
+}
+
+function parseFontFamily(str) {
+  const result = parse(str, states.BEFORE_FONT_FAMILY);
+
+  if (result !== null) {
+    return result['font-family'];
+  } else {
+    return null;
+  }
+}
+
+function parseFont(str) {
+  const result = parse(str, states.VARIATION);
+
+  if (result !== null && result['font-size'] && result['font-family'].length) {
+    return result;
+  } else {
+    return null;
+  }
 }
 
 export { parseFont, parseFontFamily };
