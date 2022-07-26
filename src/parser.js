@@ -29,12 +29,32 @@ function parseIdentifier(str) {
   return identifiers.join(' ');
 }
 
+function parseFontFamily(str) {
+  const result = parse(str, states.BEFORE_FONT_FAMILY);
+
+  if (result !== null) {
+    return result['font-family'];
+  } else {
+    return null;
+  }
+}
+
+function parseFont(str) {
+  const result = parse(str, states.VARIATION);
+
+  if (result !== null && result['font-size'] && result['font-family'].length) {
+    return result;
+  } else {
+    return null;
+  }
+}
+
 /**
  * @param {string} input
  * @return {Object|null}
  */
-function parse(input) {
-  let state = states.VARIATION;
+function parse(input, initialState) {
+  let state = initialState;
   let buffer = '';
   const result = {
     'font-family': []
@@ -53,7 +73,7 @@ function parse(input) {
         }
       } while (input.charAt(index - 2) === '\\');
 
-      result['font-family'].push(input.slice(i, index));
+      result['font-family'].push(input.slice(i + 1, index - 1).replace(/\\('|")/g, "$1"));
 
       i = index - 1;
       state = states.FONT_FAMILY;
@@ -127,11 +147,7 @@ function parse(input) {
     }
   }
 
-  if (result['font-size'] && result['font-family'].length) {
-    return result;
-  } else {
-    return null;
-  }
+  return result;
 }
 
-export default parse;
+export { parseFont, parseFontFamily };

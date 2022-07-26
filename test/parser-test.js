@@ -1,5 +1,7 @@
 import expect from 'expect.js'
-import parse from '../src/parser.js';
+import { parseFont } from '../src/parser.js';
+
+const parse = parseFont;
 
 describe('CSS Font parser', function () {
   it('returns null on invalid css font values', function () {
@@ -26,14 +28,14 @@ describe('CSS Font parser', function () {
   });
 
   it('handles quoted family names correctly', function () {
-    expect(parse('12px "Times New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ['"Times New Roman"'] });
-    expect(parse("12px 'Times New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ["'Times New Roman'"] });
+    expect(parse('12px "Times New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ['Times New Roman'] });
+    expect(parse("12px 'Times New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ["Times New Roman"] });
 
-    expect(parse('12px "Times\\\' New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ["\"Times\\\' New Roman\""] });
-    expect(parse("12px 'Times\\\" New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ['\'Times\\\" New Roman\''] });
+    expect(parse('12px "Times\\\' New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ["Times\\\' New Roman"] });
+    expect(parse("12px 'Times\\\" New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ['Times\\\" New Roman'] });
 
-    expect(parse('12px "Times\\\" New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ['"Times\\\" New Roman"'] });
-    expect(parse("12px 'Times\\\' New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ["'Times\\\' New Roman'"] });
+    expect(parse('12px "Times\\\" New Roman"')).to.eql({ 'font-size': '12px', 'font-family': ['Times\\\" New Roman'] });
+    expect(parse("12px 'Times\\\' New Roman'")).to.eql({ 'font-size': '12px', 'font-family': ["Times\\\' New Roman"] });
   });
 
   it('handles unquoted identifiers correctly', function () {
@@ -56,6 +58,15 @@ describe('CSS Font parser', function () {
     expect(parse('12px Ahem\\!')).to.eql({ 'font-size': '12px', 'font-family': ['Ahem\\!'] });
     expect(parse('12px \\$42')).to.eql({ 'font-size': '12px', 'font-family': ['\\$42'] });
     expect(parse('12px €42')).to.eql({ 'font-size': '12px', 'font-family': ['€42'] });
+  });
+
+  it('parses escape characters correctly', function () {
+    expect(parse('1rem Courier\\000020New')).to.eql({ "font-family": ["Courier New"], "font-size": "1rem" });
+  });
+
+  it('parses escaped spaces correctly', function () {
+    expect(parse('12px Font Awesome\ 5 Free')).to.eql({ "font-family": ["Font Awesome 5 Free"], "font-size": "12px" });
+    expect(parse('12px Foo\\\\Bar')).to.eql({ 'font-family': ['Foo\\Bar'], "font-size": "12px" });
   });
 
   it('correctly parses font-size', function () {
