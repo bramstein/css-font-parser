@@ -32,7 +32,7 @@ parseFont('15px/18px "Neue Helvetica", Helvetica, sans-serif');
 
 parseFontFamily('"Neue Helvetica", Helvetica, system-ui, sans-serif');
 
-> ['Neue Helvetica', 'Helvetica, 'system-ui', 'sans-serif']
+> ['Neue Helvetica', 'Helvetica', 'system-ui', 'sans-serif']
 ```
 
 ## License
