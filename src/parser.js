@@ -9,7 +9,7 @@ const states = {
   AFTER_OBLIQUE: 5,
   ESCAPING: 6,
   IDENTIFIER: 7,
-  HEXESCAPING: 8
+  HEXESCAPING: 8,
 };
 
 /**
@@ -18,7 +18,7 @@ const states = {
  # @return {boolean}
  */
 function isValidIdentifier(identifier) {
-  return !(/^(-?\d|--)/.test(identifier));
+  return !/^(-?\d|--)/.test(identifier);
 }
 
 /**
@@ -31,20 +31,20 @@ function isValidIdentifier(identifier) {
  */
 function parseIdentifier(str) {
   const identifiers = [];
-  let buffer = '';
-  let hex = '';
+  let buffer = "";
+  let hex = "";
   let state = states.IDENTIFIER;
 
-  for (let c, i = 0; c = str.charAt(i); i++) {
+  for (let c, i = 0; (c = str.charAt(i)); i++) {
     if (/[a-zA-Z\d\xa0-\uffff_-]/.test(c) && state === states.IDENTIFIER) {
       buffer += c;
-    } else if (c === '\\' && state === states.IDENTIFIER) {
+    } else if (c === "\\" && state === states.IDENTIFIER) {
       state = states.ESCAPING;
-    } else if (c === ' ' && state === states.IDENTIFIER) {
-      if (buffer !== '') {
+    } else if (c === " " && state === states.IDENTIFIER) {
+      if (buffer !== "") {
         if (isValidIdentifier(buffer)) {
           identifiers.push(buffer);
-          buffer = '';
+          buffer = "";
         } else {
           return null;
         }
@@ -63,7 +63,7 @@ function parseIdentifier(str) {
       } else {
         buffer += String.fromCodePoint(parseInt(hex, 16));
         buffer += c;
-        hex = '';
+        hex = "";
         state = states.IDENTIFIER;
       }
     } else {
@@ -71,7 +71,7 @@ function parseIdentifier(str) {
     }
   }
 
-  if (buffer !== '') {
+  if (buffer !== "") {
     if (isValidIdentifier(buffer)) {
       identifiers.push(buffer);
     } else {
@@ -79,7 +79,7 @@ function parseIdentifier(str) {
     }
   }
 
-  return identifiers.join(' ');
+  return identifiers.join(" ");
 }
 
 /**
@@ -89,12 +89,12 @@ function parseIdentifier(str) {
  */
 function parse(input, initialState) {
   let state = initialState;
-  let buffer = '';
+  let buffer = "";
   const result = {
-    'font-family': []
+    "font-family": [],
   };
 
-  for (let c, i = 0; c = input.charAt(i); i += 1) {
+  for (let c, i = 0; (c = input.charAt(i)); i += 1) {
     if (state === states.BEFORE_FONT_FAMILY && (c === '"' || c === "'")) {
       let index = i + 1;
 
@@ -105,63 +105,77 @@ function parse(input, initialState) {
           // If a string is not closed by a ' or " return null.
           return null;
         }
-      } while (input.charAt(index - 2) === '\\');
+      } while (input.charAt(index - 2) === "\\");
 
-      result['font-family'].push(input.slice(i + 1, index - 1).replace(/\\('|")/g, "$1"));
+      result["font-family"].push(
+        input.slice(i + 1, index - 1).replace(/\\('|")/g, "$1")
+      );
 
       i = index - 1;
       state = states.FONT_FAMILY;
-      buffer = '';
-    } else if (state === states.FONT_FAMILY && c === ',') {
+      buffer = "";
+    } else if (state === states.FONT_FAMILY && c === ",") {
       state = states.BEFORE_FONT_FAMILY;
-      buffer = '';
-    } else if (state === states.BEFORE_FONT_FAMILY && c === ',') {
+      buffer = "";
+    } else if (state === states.BEFORE_FONT_FAMILY && c === ",") {
       const identifier = parseIdentifier(buffer);
 
       if (identifier) {
-        result['font-family'].push(identifier);
+        result["font-family"].push(identifier);
       }
-      buffer = '';
-    } else if (state === states.AFTER_OBLIQUE && c === ' ') {
+      buffer = "";
+    } else if (state === states.AFTER_OBLIQUE && c === " ") {
       if (/^(?:\+|-)?(?:[0-9]*\.)?[0-9]+(?:deg|grad|rad|turn)$/.test(buffer)) {
-        result['font-style'] += ' ' + buffer;
-        buffer = '';
+        result["font-style"] += " " + buffer;
+        buffer = "";
       } else {
         // The 'oblique' token was not followed by an angle.
         // Backtrack to allow the token to be parsed as VARIATION
         i -= 1;
       }
       state = states.VARIATION;
-    } else if (state === states.VARIATION && (c === ' ' || c === '/')) {
-      if (/^(?:(?:xx|x)-large|(?:xx|s)-small|small|large|medium)$/.test(buffer) ||
-          /^(?:larg|small)er$/.test(buffer) ||
-          /^(?:\+|-)?(?:[0-9]*\.)?[0-9]+(?:em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)$/.test(buffer)) {
-        state = c === '/' ? states.LINE_HEIGHT : states.BEFORE_FONT_FAMILY;
-        result['font-size'] = buffer;
+    } else if (state === states.VARIATION && (c === " " || c === "/")) {
+      if (
+        /^(?:(?:xx|x)-large|(?:xx|s)-small|small|large|medium)$/.test(buffer) ||
+        /^(?:larg|small)er$/.test(buffer) ||
+        /^(?:\+|-)?(?:[0-9]*\.)?[0-9]+(?:em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)$/.test(
+          buffer
+        )
+      ) {
+        state = c === "/" ? states.LINE_HEIGHT : states.BEFORE_FONT_FAMILY;
+        result["font-size"] = buffer;
       } else if (/^italic$/.test(buffer)) {
-        result['font-style'] = buffer;
+        result["font-style"] = buffer;
       } else if (/^oblique$/.test(buffer)) {
-        result['font-style'] = buffer;
+        result["font-style"] = buffer;
         state = states.AFTER_OBLIQUE;
       } else if (/^small-caps$/.test(buffer)) {
-        result['font-variant'] = buffer;
+        result["font-variant"] = buffer;
       } else if (/^(?:bold(?:er)?|lighter|normal)$/.test(buffer)) {
-        result['font-weight'] = buffer;
-      } else if (/^[+-]?(?:[0-9]*\.)?[0-9]+(?:e[+-]?(?:0|[1-9][0-9]*))?$/.test(buffer)) {
+        result["font-weight"] = buffer;
+      } else if (
+        /^[+-]?(?:[0-9]*\.)?[0-9]+(?:e[+-]?(?:0|[1-9][0-9]*))?$/.test(buffer)
+      ) {
         const num = parseFloat(buffer);
         if (num >= 1 && num <= 1000) {
-          result['font-weight'] = buffer;
+          result["font-weight"] = buffer;
         }
-      } else if (/^(?:(?:ultra|extra|semi)-)?(?:condensed|expanded)$/.test(buffer)) {
-        result['font-stretch'] = buffer;
+      } else if (
+        /^(?:(?:ultra|extra|semi)-)?(?:condensed|expanded)$/.test(buffer)
+      ) {
+        result["font-stretch"] = buffer;
       }
-      buffer = '';
-    } else if (state === states.LINE_HEIGHT && c === ' ') {
-      if (/^(?:\+|-)?([0-9]*\.)?[0-9]+(?:em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)?$/.test(buffer)) {
-        result['line-height'] = buffer;
+      buffer = "";
+    } else if (state === states.LINE_HEIGHT && c === " ") {
+      if (
+        /^(?:\+|-)?([0-9]*\.)?[0-9]+(?:em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)?$/.test(
+          buffer
+        )
+      ) {
+        result["line-height"] = buffer;
       }
       state = states.BEFORE_FONT_FAMILY;
-      buffer = '';
+      buffer = "";
     } else {
       buffer += c;
     }
@@ -177,7 +191,7 @@ function parse(input, initialState) {
     const identifier = parseIdentifier(buffer);
 
     if (identifier) {
-      result['font-family'].push(identifier);
+      result["font-family"].push(identifier);
     }
   }
 
@@ -188,7 +202,7 @@ function parseFontFamily(str) {
   const result = parse(str, states.BEFORE_FONT_FAMILY);
 
   if (result !== null) {
-    return result['font-family'];
+    return result["font-family"];
   } else {
     return null;
   }
@@ -197,7 +211,7 @@ function parseFontFamily(str) {
 function parseFont(str) {
   const result = parse(str, states.VARIATION);
 
-  if (result !== null && result['font-size'] && result['font-family'].length) {
+  if (result !== null && result["font-size"] && result["font-family"].length) {
     return result;
   } else {
     return null;
