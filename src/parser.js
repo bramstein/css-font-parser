@@ -6,8 +6,20 @@ const states = {
   LINE_HEIGHT: 2,
   FONT_FAMILY: 3,
   BEFORE_FONT_FAMILY: 4,
-  AFTER_OBLIQUE: 5
+  AFTER_OBLIQUE: 5,
+  ESCAPING: 6,
+  IDENTIFIER: 7,
+  HEXESCAPING: 8
 };
+
+/**
+ * Returns true if the identifier is valid.
+ * @param {string} identifier
+ # @return {boolean}
+ */
+function isValidIdentifier(identifier) {
+  return !(/^(-?\d|--)/.test(identifier));
+}
 
 /**
  * Attempt to parse a string as an identifier. Return
@@ -18,15 +30,56 @@ const states = {
  * @return {string|null}
  */
 function parseIdentifier(str) {
-  const identifiers = str.replace(/^\s+|\s+$/, '').replace(/\s+/g, ' ').split(/(?<!\\) /);
+  const identifiers = [];
+  let buffer = '';
+  let hex = '';
+  let state = states.IDENTIFIER;
 
-  for (let i = 0; i < identifiers.length; i += 1) {
-    if (/^(?:-?\d|--)/.test(identifiers[i]) ||
-        !/^(?:[_a-zA-Z0-9-]|[^\0-\237]|(?:\\[0-9a-f]{1,6}(?:\r\n|[ \n\r\t\f])?|\\[^\n\r\f0-9a-f]))+$/.test(identifiers[i])) {
+  for (let c, i = 0; c = str.charAt(i); i++) {
+    if (/[a-zA-Z\d\xa0-\uffff_-]/.test(c) && state === states.IDENTIFIER) {
+      buffer += c;
+    } else if (c === '\\' && state === states.IDENTIFIER) {
+      state = states.ESCAPING;
+    } else if (c === ' ' && state === states.IDENTIFIER) {
+      if (buffer !== '') {
+        if (isValidIdentifier(buffer)) {
+          identifiers.push(buffer);
+          buffer = '';
+        } else {
+          return null;
+        }
+      }
+    } else if (state === states.ESCAPING) {
+      if (/[0-9a-f]/i.test(c)) {
+        hex += c;
+        state = states.HEXESCAPING;
+      } else {
+        buffer += c;
+        state = states.IDENTIFIER;
+      }
+    } else if (state === states.HEXESCAPING) {
+      if (/[0-9a-f]/i.test(c) && hex.length < 6) {
+        hex += c;
+      } else {
+        buffer += String.fromCodePoint(parseInt(hex, 16));
+        buffer += c;
+        hex = '';
+        state = states.IDENTIFIER;
+      }
+    } else {
       return null;
     }
   }
-  return identifiers.map(identifier => identifier.replace(/\\ /, ' ')).join(' ');
+
+  if (buffer !== '') {
+    if (isValidIdentifier(buffer)) {
+      identifiers.push(buffer);
+    } else {
+      return null;
+    }
+  }
+
+  return identifiers.join(' ');
 }
 
 /**

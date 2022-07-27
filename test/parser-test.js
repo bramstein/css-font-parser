@@ -53,10 +53,10 @@ describe('CSS Font parser', function () {
   });
 
   it('correctly parses escaped characters in identifiers', function () {
-    expect(parse('12px Red\\/Black')).to.eql({ 'font-size': '12px', 'font-family': ['Red\\/Black'] });
+    expect(parse('12px Red\\/Black')).to.eql({ 'font-size': '12px', 'font-family': ['Red/Black'] });
     expect(parse('12px Lucida    Grande')).to.eql({ 'font-size': '12px', 'font-family': ['Lucida Grande'] });
-    expect(parse('12px Ahem\\!')).to.eql({ 'font-size': '12px', 'font-family': ['Ahem\\!'] });
-    expect(parse('12px \\$42')).to.eql({ 'font-size': '12px', 'font-family': ['\\$42'] });
+    expect(parse('12px Ahem\\!')).to.eql({ 'font-size': '12px', 'font-family': ['Ahem!'] });
+    expect(parse('12px \\$42')).to.eql({ 'font-size': '12px', 'font-family': ['$42'] });
     expect(parse('12px €42')).to.eql({ 'font-size': '12px', 'font-family': ['€42'] });
   });
 
@@ -66,7 +66,6 @@ describe('CSS Font parser', function () {
 
   it('parses escaped spaces correctly', function () {
     expect(parse('12px Font Awesome\\ 5 Free')).to.eql({ "font-family": ["Font Awesome 5 Free"], "font-size": "12px" });
-    expect(parse('12px Foo\\\\Bar')).to.eql({ 'font-family': ['Foo\\Bar'], "font-size": "12px" });
   });
 
   it('correctly parses font-size', function () {
