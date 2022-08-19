@@ -2,14 +2,22 @@
   "name": "css-font-parser",
   "version": "1.0.1",
   "description": "A parser for the CSS font value",
-  "main": "src/parser.js",
   "directories": {
     "test": "test"
   },
+  "source": "src/parser.js",
+  "exports": {
+    "require": "./dist/css-font-parser.cjs",
+    "default": "./dist/css-font-parser.modern.js"
+  },
+  "main": "./dist/css-font-parser.cjs",
+  "module": "./dist/css-font-parser.module.js",
+  "unpkg": "./dist/css-font-parser.umd.js",
   "type": "module",
   "scripts": {
     "test": "mocha --reporter spec && npm run lint",
-    "lint": "eslint src/*.js test/*.js"
+    "lint": "eslint src/*.js test/*.js",
+    "build": "microbundle"
   },
   "repository": "https://github.com/bramstein/css-font-parser.git",
   "keywords": [
@@ -27,6 +35,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-promise": "^6.0.0",
+    "microbundle": "^0.15.1",
     "mocha": "=10.0.0",
     "prettier": "2.7.1",
     "unexpected": "=13.0.0"
