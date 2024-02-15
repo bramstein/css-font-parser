@@ -27,7 +27,7 @@
     "parser"
   ],
   "author": "Bram Stein <b.l.stein@gmail.com> (http://www.bramstein.com)",
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "devDependencies": {
     "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
